@@ -5,7 +5,7 @@ AM_CFLAGS = -pedantic -Wno-long-long -g3 -Wall -Wmissing-prototypes
 else
 AM_CFLAGS = 
 endif
-AM_LDFLAGS = -dynamic
+AM_LDFLAGS = -static
 
 bin_PROGRAMS = rdd-copy rdd-verify
 

@@ -180,7 +180,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 @GCC_COMPILER_FALSE@AM_CFLAGS = 
 @GCC_COMPILER_TRUE@AM_CFLAGS = -pedantic -Wno-long-long -g3 -Wall -Wmissing-prototypes
-AM_LDFLAGS = -dynamic
+AM_LDFLAGS = -static
 noinst_LIBRARIES = librdd.a
 librdd_a_SOURCES = rdd.h rsysint.h \
 		strerror.c \

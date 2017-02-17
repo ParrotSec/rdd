@@ -228,6 +228,4 @@ int rdd_writer_write(RDD_WRITER *w, const unsigned char *buf, unsigned nbyte);
  */
 int rdd_writer_close(RDD_WRITER *w);
 
-RDD_WRITER *rdd_test_get_writer(int argc, char **argv);
-
 #endif /* __writer_h__ */
