@@ -1,0 +1,15 @@
+Source: rdd
+Section: utils
+Priority: optional
+Maintainer: Danny van der Meeren <danny@illogic.nl>
+Build-Depends: debhelper (>= 5), autotools-dev, libssl-dev, zlib1g-dev
+Standards-Version: 3.7.2
+
+Package: rdd
+Architecture: any
+Depends: ${shlibs:Depends}, python
+Description: a forensic copy program 
+ A forensic copy program developed at and used by 
+ the Netherlands Forensic Institute (NFI). Unlike most copy programs, rdd is
+ robust with respect to read errors, which is an important property in a
+ forensic operating environment.

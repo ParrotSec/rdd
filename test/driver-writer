@@ -1,0 +1,123 @@
+#!/usr/bin/env python
+
+# Copyright (c) 2002 - 2006, Netherlands Forensic Institute
+# 
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. Neither the name of the Institute nor the names of its contributors
+#    may be used to endorse or promote products derived from this software
+#    without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+
+import getopt
+import glob
+import os, os.path
+import stat
+import sys
+import zlib
+
+partitioned = 0
+compressed = 0
+readonly = 0
+
+def commandline():
+	opts, args = getopt.getopt(sys.argv[1:], 'prz')
+	for opt, val in opts:
+		if opt == '-p':
+			global partitioned
+			partitioned = 1
+		elif opt == '-z':
+			global compressed
+			compressed = 1
+		elif opt == '-r':
+			global readonly
+			readonly = 1
+	if len(args) != 3:
+		sys.stderr.write('Usage: driver-writer [-r] [-z] prog in out\n')
+		sys.exit(1)
+	return args
+
+def error(msg, exitcode=1):
+	sys.stderr.write('error: %s\n' % msg)
+	sys.exit(exitcode)
+
+def readfile(path, parts=0):
+	if not parts:
+		fp = file(path, 'rb')
+		buf = fp.read()
+		fp.close()
+		return buf
+
+	print 'collecting parts...'
+	hd, tl = os.path.split(path)
+	if hd:
+		paths = glob.glob('%s/[0-9]*-%s' % (hd, tl))
+	else:
+		paths = glob.glob('[0-9]*-%s' % tl)
+	buf = ''
+
+	paths.sort() # somehow the items in paths were not in 
+			#alphabetical order automatically
+
+	for path in paths:
+		fp = file(path, 'rb')
+		buf += fp.read()
+		fp.close()
+	return buf
+
+def run(copyprog, inpath, outpath):
+	status = os.system('./%s "%s" "%s"' % (copyprog, inpath, outpath))
+	if status:
+		status = (status >> 8) & 0xff
+		sys.exit(status)
+
+	inbuf = readfile(inpath)
+	outbuf = readfile(outpath, partitioned)
+
+	if readonly:
+		print 'checking file mode...'
+		statinfo = os.stat(outpath)
+		anywrite = stat.S_IWUSR|stat.S_IWGRP|stat.S_IWOTH
+		if (statinfo.st_mode & anywrite) != 0:
+			error('%s is not read-only' % outpath)
+
+	if compressed:
+		print 'decompressing...'
+		outbuf = zlib.decompress(outbuf)
+
+	print 'comparing files...'
+	if inbuf != outbuf:
+		error('output file %s differs from input file %s' \
+			% (outpath, inpath))
+
+	print 'ok'
+
+if __name__ == '__main__':
+	try:
+		args = commandline()
+		copyprog, inpath, outpath = args
+		run(copyprog, inpath, outpath)
+	except SystemExit, exn:
+		raise
+	except Exception, exn:
+		error('Exception: %s' % str(exn))

@@ -1,0 +1,377 @@
+.TH RDD "1" "December 2004" "rdd 2.0"
+.SH NAME
+rdd-copy \- copy a file, even if read errors occur
+.SH SYNOPSIS
+.B rdd-copy [\fIOPTION\fR] src [dst]
+
+.B rdd-copy -C [\fICLIENT OPTION\fR] src [host:]dst
+
+.B rdd-copy -S [\fISERVER OPTION\fR]
+.SH DESCRIPTION
+.\" Add any additional description here
+.PP
+Rdd-copy is a file and device copying utility that includes features
+that are useful in a forensic environment.
+In particular, rdd-copy can compute cryptographic hashes over the data it copies, 
+is robust with respect to read errors,
+and can copy data across a network.
+
+Rdd-copy is best understood as a program that consists of a reader stage and
+one or more processing stages.  The reader stage reads input data in a robust
+way.  It will retry failed reads.  If a read error persists, the reader stage
+substitutes zero bytes for the input bytes that it fails to read.  The resulting
+bytes are passed to all subsequent processing stages.
+
+The processing stages are enabled through command-line options.  The current
+stages are: checksumming (Adler32 and CRC32), hashing (MD5 and SHA1),
+file output, network output, and statistics.
+
+Rdd-copy can be run in \fBlocal mode\fR, in \fBclient mode\fR, and in \fBserver
+mode\fR.
+The mode is indicated by the first command-line argument.
+
+Copying data across a network requires two rdd-copy processes: a client process
+that reads the data from disk and transmits it across the network, and a
+server process that reads the data from the network and writes it to a
+file or device.
+
+.SH LOCAL MODE
+In local mode, rdd-copy copies source file \fBsrc\fR
+to destination file \fBdst\fR,
+handling read errors according to the options.
+If \fBdst\fR is not specified, the data in \fBsrc\fR will
+be read and optionally hashed, but it will not be written.
+To write to standard output, specify \fB-\fR as \fBdst\fR.
+
+Rdd-copy will optionally compute an MD5 or a SHA1 hash value over
+the input bytes and the zero bytes it substitutes for blocks
+it cannot read.  These hash values should be interpreted with
+care (see below).
+
+Rdd-copy does NOT guarantee that the bytes it reads are the
+same bytes that are stored on the input medium.  It simply takes what
+\fBread(2)\fR returns.  Any hash values (see options) are computed over the bytes
+that \fBread(2)\fR returns or, if \fBread(2)\fR fails, over zero-valued fill
+bytes.
+
+Rdd-copy does NOT guarantee that the bytes that it reads into memory (or the
+zero-valued bytes that it substitutes when a read error occurs)
+will be written to the output file correctly.
+If you wish to verify the correspondence between
+what rdd-copy saw and what got written to disk, you will have to
+recompute the MD5 and/or SHA1 hash values over the output file
+and compare them with the hash values reported by rdd-copy.
+This is a useful verification step, but beware that even this
+step cannot guarantee perfect correspondence with the data stored
+on the source medium.
+
+The best end-to-end test is probably to read back the output
+file and compare each output byte to the corresponding input
+byte, unless that input byte was part of a block for which rdd-copy
+reported a read error.
+
+Rdd-copy does NOT recover from persisting write errors.  Rdd-copy was designed
+to handle unfriendly source media only.  If you get write errors,
+you should replace your target medium.
+
+.SH READ ERRORS
+In local mode and in client mode, rdd-copy reads from disk.
+Rdd-copy assumes that the source disk may be faulty and tries to be
+robust with respect to disk-read errors.  In server mode, rdd-copy reads
+from the network and makes no attempt to survive read errors.
+The explanation below applies only to read errors that occur
+in local mode and in client mode.
+
+When a read error occurs, rdd-copy reduces the block
+size to the minimum block size (see \fB\-\-min\-block\-size\fR) and resets
+the read pointer to the location at which it started the read that failed.
+
+Next, rdd-copy tries to read a series of minimum-sized blocks (see \fB\-\-min\-block\-size\fR).
+When such a read
+fails, it is retried a user-specified number of times (see \fB\-\-nretry\fR).
+If the read failure persists, rdd-copy normally will skip a minimum-sized block of input
+data and will write a minimum-sized block of zero bytes to the destination file.
+These zero bytes are also passed to all other rdd-copy processing stages (checksumming,
+hashing, and statistics).
+
+Any persistent read failure counts toward the maximum number
+of read errors that the user will tolerate (see \fB\-\-max\-read\-err\fR).
+If this maximum is reached, rdd-copy will exit immediately.  
+By default, however, an infinite number of read errors is allowed.
+
+After a read failure, rdd-copy continues to use the minimum block size to read
+data until it has read \fIblock-size\fR bytes of data without errors.
+(\fIblock-size\fR is the user-specified block size, see \fB\-\-block\-size\fR.)
+Only then will rdd-copy increase its block size again, doubling the size at each
+successful read, until it reaches the default block size.
+
+.SH CLIENT MODE
+In client mode, rdd-copy operates as in local mode, except that the
+data will not be copied to a file, but will be written to a
+TCP connection to an rdd-copy server process.
+
+In client mode, a destination file, \fBdst\fR, on a destination
+\fBhost\fR must be specified.  If no \fBhost\fR is specified,
+\fBlocalhost\fR will be used.
+
+.SH SERVER MODE
+In server mode, rdd-copy accepts one TCP connection from an rdd-copy client.
+The server process must be started before the client process.
+In server mode, rdd-copy will read data from a TCP connection and write
+it to a target file.
+For now, the target file must always be specified by the client.
+The main reason for this decision is to keep open the option
+of having \fBinetd(8)\fR or \fBxinetd(8)\fR start an rdd-copy server process.
+
+.SH OUTPUT
+Informative messages, error messages, and statistics are all written to
+\fBstderr\fR.
+
+.SH OPTIONS
+.TP
+\fB\-C, \-\-client\fR
+Run rdd-copy in client mode.  If you use this option, it must come first.
+.TP
+\fB\-S, \-\-server\fR
+Run rdd-copy in server mode.  If you use this option, it must come first.
+.TP
+\fB-p, \-\-port <portnum>\fR
+Modes: client, server.
+
+Specifies the port number \fB<portnum>\fR at which the server listens for an
+incoming connection.
+The default port is 4832.
+.TP
+\fB\-?, \-\-help\fR
+Modes: all.
+
+Print a usage message that includes this list of options.
+.TP
+\fB\-V, \-\-version\fR
+Modes: all.
+
+Print version information and exit
+.TP
+\fB\-v, \-\-verbose\fR
+Modes: all.
+
+Be verbose.
+.TP
+\fB\-q, \-\-quiet\fR
+Modes: all.
+
+Do not pose interactive questions.
+.TP
+\fB\-l, \-\-log\-file <logfile>\fR
+Modes: all.
+
+Log all messages except progress messages to \fB<logfile>\fR.
+.TP
+\fB\-f, \-\-force\fR
+Modes: local, server.
+
+Force existing files to be overwritten.  The default behavior is
+to bail out when the output file already exists.
+.TP
+\fB\-b, \-\-block\-size <size>\fR
+Modes: local, client.
+
+Specify the default block size; <size> must be a power of two.
+While no read errors occur, rdd-copy will read and write blocks of <size> bytes.
+.TP
+\fB\-m, \-\-min\-block\-size <size>\fR
+Modes: local, client.
+
+Specify the minimum read size; <size> must be a power of two.
+When a persistent read error occurs, at least this many bytes of
+data will be skipped and replaced with zero bytes in the destination file.
+.TP
+\fB\-n, \-\-nretry <count>\fR
+Modes: local, client.
+
+Retry failed reads up to <count> times.  In many cases, using a large
+retry value makes little sense, because the operating system's device
+driver will not indicate a failed read until it has, itself, retried
+the read several times.
+.TP
+\fB\-o, \-\-offset <size>\fR
+Modes: local, client.
+
+Skip <size> bytes from the start of the input file before reading
+any data.  The bytes that are skipped will not be included in any
+hash computation and will not be written to the output file.
+.TP
+\fB\-c, \-\-count <size>\fR
+Modes: local, client.
+
+Read at most <size> input bytes or read until end-of-file.
+.TP
+\fB\-z, \-\-compress\fR
+Modes: client.
+
+Compress network data.
+.TP
+\fB\-s, \-\-split <size>\fR
+Modes: local, server.
+
+If necessary, create multiple output files, none of which will be
+larger than <size> bytes.  Each output file will have a name that
+consists of a sequence number followed by a dash and the name
+specified on the command line. 
+.TP
+\fB\-r, \-\-raw\fR
+Modes: local, client.
+
+Access the device using the raw device. The data will not travel through the 
+buffer cache.
+
+.TP
+\fB\-P, \-\-progress <sec>\fR
+Modes: all.
+
+Report progress (bytes read and percentage of data covered) every
+<sec> seconds.
+.TP
+\fB\-M, \-\-max\-read\-err <count>\fR
+Modes: local, client.
+
+Give up after <count> read errors.
+.TP
+\fB\-\-md5\fR
+Modes: all.
+
+Compute an MD5 hash value over all data that was read without errors
+and over the zero-filled blocks that are used to replace bad blocks.
+.TP
+\fB\-\-sha, \-\-sha1\fR
+Modes: all.
+
+Compute a SHA1 hash value over all data that was read without errors
+and over the zero-filled blocks that are used to replace bad blocks.
+.TP
+\fB\-\-checksum, \-\-adler32 <file>\fR
+Modes: all.
+
+Compute an Adler32 checksum value over blocks of data produced
+by the reader stage.  The last block to be checksummed may be smaller than
+the the block size that is used.  All checksum values are written to <file>.
+.TP
+\fB\-\-checksum\-block\-size, \-\-adler32\-block\-size <size>\fR
+Modes: all.
+
+Compute Adler32 checksum values over data blocks with a size of
+<size> bytes.  Only the last data block to be checksummed may be
+smaller than <size>.  The default block size is 32 Kbyte.
+.TP
+\fB\-\-crc32 <file>\fR
+Modes: all.
+
+Compute a CRC32 checksum value over blocks of data produced
+by the reader stage.  The last block to be checksummed may be smaller than
+the the block size that is used.  All checksum values are written to <file>.
+.TP
+\fB\-\-crc32\-block\-size <size>\fR
+Modes: all.
+
+Compute CRC32 checksum values over data blocks with a size of
+<size> bytes.  Only the last data block to be checksummed may be
+smaller than <size>.  The default block size is 32 Kbyte.
+.TP
+\fB\-H, \-\-histogram <file>\fR
+Modes: all.
+
+Compute a histogram over each block of data produced by the reader stage.
+The histogramming block size can be set by the user (see \fB\-\-hist-block-size\fR).
+For each block, write a single text line of statistics to <file>.
+.TP
+\fB\-h, \-\-hist-block-size <size>\fR
+Modes: all.
+
+Set the histogramming block size to <size> bytes.
+The default block size is 256 Kbyte.
+.TP
+\fB\-\-block\-md5 <file>\fR
+Modes: all.
+
+Compute the MD5 hash value over blocks of data produced
+by the reader stage.  The last block to be hashed may be smaller than
+the block size.  All MD5 values are written to text file <file>.
+Each line in this file contains a block number, followed by a space,
+followed by the hash value of the corresponding block.
+.TP
+\fB\-\-block\-md5\-size <size>\fR
+Modes: all.
+
+Sets the block size of the block-wise MD5 computation.
+The default block size is 4 Kbyte.
+
+.PP
+A <size> argument may be followed by one of the following
+multiplicative suffixes:
+c 1, w 2, b 512, k 1024, M 1,048,576, and G 1,073,741,824.
+.SH EXAMPLES
+.TP
+rdd-copy --md5 /dev/hda1
+
+Compute and print the MD5 hash value over \fB/dev/hda1\fR.
+On Linux, \fB/dev/hda1\fR denotes the first partition of the
+primary master disk.
+.TP
+rdd-copy -b 16k -m 512 -l rdd-log.txt /dev/fd0 f.img
+
+Create an image of a floppy disk (\fB/dev/fd0\fR).
+Copy 16 Kbyte at a time, but use blocks as small as a single
+sector (512 bytes) when read errors occur. Write all log 
+messages to the file \fBrdd-log.txt\fR.
+.TP
+On the server: rdd-copy -S --sha1
+.TP
+On the client: rdd-copy -C --sha1 /dev/hdb snake:/images/disk.img
+
+Copy the primary slave disk to host snake and store the data in
+file \fB/images/disk.img\fR.  The client host computes a SHA1 hash
+over the data it reads from the disk; the server host computes a
+SHA1 hash over the data it receives from the network.
+.TP
+rdd-copy --count 512 /dev/hda mbr.img
+
+Copy the master boot record (MBR) from the primary master disk
+to file \fBmbr.img\fR.
+.SH SEE ALSO
+.TP
+\fBrdd-verify(1)\fR, \fBraw(8)\fR
+.SH NOTES
+If you encounter read errors, do examine \fB/var/log/messages\fR (or
+the equivalent file on your operating system).  It may contain useful
+device driver error messages.
+.PP
+On Linux (kernel 2.4 and lower) rdd-copy and other programs that read from a 
+block device may yield an I/O error when they reach the end of the device, 
+even if there's nothing wrong with the device.  To the best of my knowledge, 
+this is a Linux problem rather than an rdd-copy problem; the same problem 
+occurs with GNU dd-copy and other programs.
+The problem is described in the following document:
+http://www.cftt.nist.gov/Notes_on_dd_and_Odd_Sized_Disks4.doc.
+The problem has apparently been solved in the Linux 2.6 kernel.
+.PP
+If you use \fBrdd-copy\fR to access a device, consider using
+the \fIraw\fR device (see \fBraw(8)\fR).  This way, your data will
+not travel through the buffer cache.
+.SH BUGS
+Server-side errors are not reported back to the client.
+Users must watch the server's output.
+.SH "REPORTING BUGS"
+Report bugs to <rdd@holmes.nl>.
+.SH ACKNOWLEDGEMENTS
+Many thanks to all who reported bugs and successes, and who
+suggested improvements.
+You know who you are.
+.SH COPYRIGHT
+Copyright \(co 2002-2003 Netherlands Forensic Institute
+.br
+This software comes with NO warranty;
+not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+.SH HISTORY
+Up to version 1.2-7a rdd-copy (then called rdd) used a different error recovery strategy.
+With the new strategy, users can no longer set the recovery threshold, so the
+\fB\-\-recovery\-len\fR option has been retired.

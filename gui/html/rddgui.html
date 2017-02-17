@@ -1,0 +1,764 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+	<title>Rddgui Help</title>
+	<link rel="stylesheet" href="helpstyle.css" type="text/css">
+</head>
+
+<body bgcolor="white">
+
+<div id="head">
+<h1>Rddgui Help</h1>
+	<p>
+	Version 0.1<br>
+	Copyright (C) 2004, Netherlands Forensic Institute<br>
+	</p>
+
+</div>
+
+<div id="introduction">
+<h2>Introduction</h2>
+	
+	<p>
+	Rddgui is a Graphical User Interface (GUI) for the Robust Disk 
+	Duplicaitor (rdd) imaging software. Rdd used to be a command line 
+	utililty. With version 2.0 it comes with a GUI that can be used to 
+	avoid typing long command lines. A command line version of rdd is 
+	still available.
+	</p><p>
+	This help applies to rddgui verision 1.0. It might be useful for later 
+	versions too, although some modifications might be made to the user
+	interface. This help might also be useful for the command line version 
+	of rdd because it extensively explains all options. The options on the 
+	rdd command line version are the same, the only difference is the GUI.
+	</p>
+
+</div>
+
+<div id="screens">
+<h2>Screens</h2>
+	
+	<p>
+	All screens in the GUI have a Help button. Clinking this button will
+	show this help page.
+	</p><p>
+	The screens are connected to each other in a wizard like style. 
+	Clicking the Next button will show the next screen while the 
+	Previous button will show the previous screen.
+	</p><p>
+	Some settings, like e.g. the input file or device settings can be 
+	customized to a high level. The regular settings are displayed in the 
+	wizard like screen while the less regular and more difficult settings
+	are 'hidden' behind an Advanced button.
+	</p><p>
+	Whenever a path to a file or device must be entered, there is a 
+	Browse button available. This button will show a file open dialog 
+	screen in which the file or device can be selected.
+	</p>
+
+<h3>Contents</h3>
+
+	<p>
+	A listing of screens in alphabetical order:
+	</p>
+	
+	<ul>
+	<li><a href="#client">Client mode settings</a></li>
+	<li><a href="#client-connecting">Client mode connecting</a></li>
+	<li><a href="#client-advanced">Client mode settings, advanced</a></li>
+	<li><a href="#error-recovery">Error-recovery</a></li>
+	<li><a href="#error-recovery-advanced">Error-recovery, advanced</a></li>
+	<li><a href="#imageorverify">Image or verify</a></li>
+	<li><a href="#imaging">Imaging</a></li>
+	<li><a href="#finished-imaging">Imaging, finished</a></li>
+	<li><a href="#input">Input</a></li>
+	<li><a href="#input-advanced">Input, advanced</a></li>
+	<li><a href="#integrity">Integrity</a></li>
+	<li><a href="#integrity-advanced">Inptegrity, advanced</a></li>
+	<li><a href="#network">Network</a></li>
+	<li><a href="#output">Output</a></li>
+	<li><a href="#output-advanced">Output, advanced</a></li>
+	<li><a href="#profile">Profile</a></li>
+	<li><a href="#server">Server mode settings</a></li>
+	<li><a href="#server-advanced">Server mode settings, advanced</a></li>
+	<li><a href="#server-connected">Server mode, connected</a></li>
+	<li><a href="#server-finished">Server mode, finished</a></li>
+	<li><a href="#server-waiting">Server mode, waiting</a></li>
+	<li><a href="#statistics">Statistics</a></li>
+	<li><a href="#statistics-advanced">Statistics, advanced</a></li>
+	<li><a href="#verify">Verify</a></li>
+	<li><a href="#verify-advanced">Verify, advanced</a></li>
+	<li><a href="#verifying">Verifying</a></li>
+	<li><a href="#verifying-finished">Verifying, finished</a></li>
+	</ul>
+	
+</div>
+
+<div id="imageorverify">
+<h3>Image or Verify</h3>
+
+	<p>
+	The rdd-gui can make an image or verify an image that already has 
+	been made. An image is a bitstream copy of all bytes of a device or 
+	file.
+	</p>
+
+</div>
+
+<div id="network">
+<h3>Network</h3>
+
+	<p>	
+	Rdd can run in 3 modes:
+	</p>
+
+	<ol>
+	<li> Local mode </li>
+	<li> Client mode </li>
+	<li> Server mode </li>
+	</ol>
+
+	<h4>Local mode</h4>
+	
+	<p>
+	Local mode does not use a network in which two versions of rdd are 
+	communicating with each oter. In local mode, rdd makes an 
+	image of a file or device and stores it either as an image file or on a
+	target device. The file or device must be avialable on the computer 
+	rdd is running on. The location can be on a server that is avialable on 
+	your network.
+	</p>
+
+	<h4>Client mode</h4>
+	
+	<p>
+	In client mode, rdd reads the device or file that has to be imaged.
+	The data read from the device or file is transmitted over the 
+	network to a computer running rdd in server mode. Because in client
+	mode rdd reads the file or device, the file or device must be 
+	accessible by rdd.
+	</p>
+
+	<h4>Server mode</h4>
+	
+	<p>
+	In server mode, rdd reads the data that is transmitted by another 
+	computer running rdd in client mode and stores it as an image file
+	or on a target device. Rdd in server mode is typically run on a 
+	server that stores several images.
+	</p>
+</div>
+
+<div id="profile">
+<h3>Profile</h3>
+
+	<p>
+	By selecting a profile, the GUI sets some default values for the 
+	chosen profile. The list of profiles contains several types of media.
+	All settings that are set to default values can be changed in screens 
+	that are to come.
+	</p>
+</div>
+
+<div id="input">
+<h3>Input</h3>
+
+	<p>
+	The input file or device is the file or device you want to image. You 
+	must specify this file or device. 
+	</p><p>
+	Rdd is designed not to change the input file or device. But, as all 
+	software, rdd is not free of bugs. When possible, use a hardware 
+	writeblocking device.
+	</p>
+</div>
+
+<div id="input-advanced">
+<h3>Input, advanced</h3>
+
+	<p>
+	Rdd can read the input file or device from the start to the end. 
+	</p><p>
+	Rdd can also read any part of the file. The following items can be set:
+	</p>
+	<ul>
+		<li>Offset: The number of bytes to skip before starting to 
+		read.</li>
+		<li>Read: The number of bytes rdd has to read.</li>
+		<li>Blocksize: the number of bytes rdd must read at a time. 
+		In general, the larger the blocksize, the faster rdd will 
+		work.  From a certain blocksize the gain in speed will be 
+		minimal by increasing the blocksize. The default blocksize of 
+		rdd is 256 kB. Some special media might use a fixed blocksize 
+		and will not respond to other blocksizes.</li>
+	</ul>
+
+	<p>
+	All values can be specified in bytes, kilobytes (kB), Megabytes (MB) 
+	and Gigabytes (GB).
+	</p>
+</div>
+
+<div id="output">
+<h3>Output</h3>
+
+	<p>
+	You must specify the output image and the logfile. 
+	</p><p>
+	The output image can be a file or a device and must be specified.
+	</p><p>
+	Rdd logs all its activity to a file. This file must be specified.
+	</p>
+</div>
+
+<div id="output-advanced">
+<h3>Output, advanced</h3>
+
+	<p>
+	Rdd can write the output image as one piece or rdd can split the output 
+	image in files of a specified size. When splitting, rdd will add a 
+	sequence number to the names of the output files.
+	</p><p>
+	Splitting an ouput image can be useful if you know you will have to 
+	burn a large image on a set of cd-recordables. 
+	</p><p>
+	Some filesystems like FAT12, FAT16, and FAT32 have a maximum file size.
+	These filesystems can not handle files larger than this size.
+	</p>
+</div>
+
+<div id="integrity">
+<h3>Integrity</h3>
+
+	<p>
+	Rdd can calculate MD5 and SHA-1 hash values over the bytes it reads.
+	</p>
+	
+<h4>Which Algorithm?</h4>
+
+	<p>
+	We recommend that you use both MD5 <i>and</i> SHA-1.
+	MD5 is widely used, but its one-way hash function has been under
+	attack for a while.
+	</p>
+
+<h4>Verification</h4>
+
+	<p>
+	We recommend that you compare the MD5 or SHA-1 hash value that
+	rdd calculated during imaging with the MD5 or SHA-1 hash values 
+	obtained by:
+	</p>
+
+	<ol>
+		<li>hashing the content of the input device;</li>
+		<li>hashing the image file rdd produced.</li>
+	</ol>
+
+	<p>
+	For this check, we recommend you use other software than rdd. Linux 
+	<code>md5sum</code> and <code>sha1sum</code> are good options.
+	</p><p>
+	When your device reports non reproducable readerrors, the verification 
+	hash might not be the same as the hash rdd calculated.
+	</p>
+	
+<h4>References</h4>
+
+	<ol>
+		<li><a href="md5-rfc">MD5 RFC</a></li>
+		<li><a href="md5-rfc">SHA-1 standard</a></li>
+	</ol>
+</div>
+
+<div id="integrity-advanced">
+<h3>Integrity, advanced</h3>
+
+	<p>
+	Besides calculating an MD5 or SHA-1 hash rdd can calculate Adler-32 
+	checksums and CRC-32 checksums over the bytes it reads. Where MD5 and 
+	SHA-1 hashes are calculated over the complete input file or device, 
+	Adler-32 and CRC-32 checksums are calculated over smaller blocks of 
+	data. All Adler-32 checksums are written to one file and all CRC-32 
+	checksums are written to one file.
+	</p><p>
+	When you have an rdd image with one of these checksum files, and 
+	the hash of the image is different from the hash rdd calculated during 
+	imaging, rdd can pinpoint the exact blocknumbers that have been 
+	changed.
+	</p><p>
+	This screen has boxes for selecting the checksum method, the size of
+	the block to calculate checksums over, and the files in which all 
+	checksums are written.
+	</p><p>
+	In most cases it is not necessary to calculate both Adler-32 checksums 
+	CRC-32 checksums. One checksumming method is enough. Adler-32 is a bit 
+	faster than CRC-32. Checksumming can be used in addition to hashing. 
+	Checksumming is not implemented in rdd to replace hashing because
+	checksums are much less distinguishing than hashes.
+	</p><p>
+	A blocksize of 64 kB is the default value in rdd. You clould select
+	larger blocksizes for large hard disk drives. This will reduce the 
+	size of the checksum file. For smaller media, like a floppy disk, 
+	you might want to use a smaller blocksize. We recommend not to use 
+	blocksizes smaller than 64 kB for the Adler-32 checkusum because the 
+	checksums might not be distinguishing enough with smaller blocksizes.
+	</p><p>
+	Refereces:
+	</p>
+
+	<ul>
+		<li><a href=http://www.rfc-archive.org/getrfc.php?rfc=2960>
+		Adler-32 (in RFC 2960)</a></li>
+		<li><a href=http://www.rfc-archive.org/getrfc.php?rfc=3309>
+		CRC-32 (in RFC 3309)</a></li>
+	</ul>
+</div>
+	
+<div id="error-recovery">
+<h3>Error recovery</h3>
+
+	<p>
+	Most copying software read files or devices in blocks, using a certain 
+	blocksize. When they encounter a read error, the whole block of e.g. 
+	256 kB, will be lost. Even though only one sector of 512 bytes was 
+	damaged and is responsible for the read errors. In this case nearly 256 
+	kB of data is lost unnecessary.
+	</p><p>
+	Rdd will reduce its blocksize when it encounters a read error when the 
+	option for error recovery is chosen. Reducing the blocksize and 
+	retrieving as much data as possible was one of the major design goals 
+	rdd. 
+	</p><p>
+	Choosing error-recovery will set the default values. To what 
+	blocksize rdd reduces its blocksize, can be set in the Error-recocery 
+	Advanced screen. The deault size is 512 bytes.
+	</p><p>
+	When rdd is unable to read the block, it will replace the block with 
+	zero bytes in the image.
+	</p>
+</div>
+
+<div id="error-recovery-advanced">
+<h3>Error recovery, Advanced</h3>
+	
+	<p>
+	When rdd encounters a read error it will try to read the block it was 
+	reading with a blocksize of the retry blocksize. The default value is 
+	512 bytes. This is the sector size of a hard disk drive. Setting a 
+	smaller blocksize when imaging a hard disk drive is useless because a 
+	standard hard disk drive will never read less bytes than 512.
+	</p><p>
+	The operating system might try to read a damaged block a couple of 
+	times. Rdd can drop the block after a certain number of retries and 
+	proceed to the next block.
+	</p><p>
+	Trying to recover as much as possible can take a lot of time. Rdd can 
+	give up after processing a certain number of damaged blocks or rdd can 
+	proceed until a crash of the operating system or a power brownout.
+	</p>
+
+</div>
+
+<div id="statistics">
+<h3>Statistics</h3>
+
+	<p>
+	Rdd can calculate the entropy and the MD5 hash value of blocks of 
+	bytes it reads. These entropy and MD5 hash values are stored in 
+	textfiles. Rdd comes with programs that can produce a plot of the
+	entropy and block-MD5 values from these textfiles.
+	</p><p>
+	The entropy of a group of bytes is a measure of the amount of 
+	randomness of the bytes in the group. Good predictability (poor 
+	randomness) results in a low entropy and poor predictability (good 
+	randomness) results in a high entropy. An expample of good 
+	predictability is a block containing zeroes. Examples of poor 
+	predictability are files that are crypted with a good crypto algorithm 
+	or files that are heavily compressed. Calculating the entropy 
+	can help distinguishing between unused areas and areas that might 
+	contain a crypto container or heavily compressed data.
+	</p><p>
+	Besides calculating an MD5 hash over the complete image, rdd can 
+	calculate an MD5 hash over blocks it reads. Calculating MD5 hash values 
+	over blocks can show if the evidence contains much re-occurring blocks. 
+	In most cases, blocks that have a high entropy cannot be discarded. 
+	Although a series of blocks have a high entropy, the blocks might be 
+	exactly the same. Analyzing the block-MD5 plot together with the 
+	entropy plot might reduce the amount of bytes worth researching.
+	</p>
+
+	<h4>How to make the plots?</h4>
+
+	<p>
+	<a href="plots.html">This document</a> describes how to make and 
+	interpret the plots. It also gives some examples.
+	</p>
+
+</div>
+
+<div id="statistics-advanced">
+<h3>Statistics, advanced</h3>
+	
+	<p>
+	In this screen you can set the blocksizes and the ouput files for the 
+	data to generate the entropy and block MD5 plots from. Please refer to 
+	the help on the Statistics screen for an explanation of these values.
+	</p>
+</div>
+
+<div id="imaging">
+<h3>Imaging</h3>
+	
+	<p>
+	This screen provides information on the progress of making an image. 
+	The following information is available:
+	</p>
+
+	<ul>
+		<li>Mode: this item tells wheather rdd is imaging in local 
+		mode or in client mode.</li>
+		<li>Progress: this item shows the progress. Keep in mind that 
+		progress information cannot be relied on when imaging media
+		with bad blocks.</li>
+		<li>Read errors: The amount of read errors so far.</li>
+		<li>Zero-block substitutions: The amount of blocks that could 
+		not be read. Note that this value can differ from the amount
+		of read errors because it can take multiple read errors to 
+		find out a block cannot be read and has to be substituted. 
+		When imaging media with blocks that sometimes cannot be read, 
+		but sometimes can, you can have the situation that rdd can 
+		read the bad block after some retries. You end up with some 
+		read errors but no substitutions. You should manually check 
+		the blocks that produced read errors.</li>
+		<li>Bytes substituted: The number of substituted bytes equals 
+		the number of zero-block substitutions times the retry 
+		blocksize.</li>
+		<li>Elapsed time: The time from the moment rdd started 
+		imaging until now.</li>
+	</ul>
+	
+	<p>
+	Pressing the Cancel button will stop the imaging in progress.
+	</p>
+
+</div>
+
+<div id="finished-imaging">
+<h3>Finished imaging</h3>
+	
+	<p>
+	This screen provides information on the completed image. 
+	The following information is available:
+	</p>
+
+	<ul>
+		<li>Mode: this item tells wheather rdd imaged in local 
+		mode or in client mode. This item also provides information 
+		on wheather rdd stopped after finishing imaging, or that it was 
+		interrupted by the user.</li>
+		<li>Read errors: The amount of read errors.</li>
+		<li>Zero-block substitutions: The amount of blocks that could 
+		not be read. Note that this value can differ from the amount
+		of read errors because it can take multiple read errors to 
+		find out a block cannot be read and has to be substituted. 
+		When imaging media with blocks that sometimes cannot be read, 
+		but sometimes can, you can have the situation that rdd can 
+		read the bad block after some retries. You end up with some 
+		read errors but no substitutions. You should manually check 
+		the blocks that produced read errors.</li>
+		<li>Bytes substituted: The number of substituted bytes equals 
+		the number of zero-block substitutions times the retry 
+		blocksize.</li>
+		<li>Total time: The time from the moment rdd started 
+		imaging until all bytes were imaged.</li>
+		<li>MD5: The MD5 value of the image. This field will be left
+		blank or invisible when rdd was not configured to calculate 
+		an MD5 hash value.</li>
+		<li>SHA-1: The SHA-1 value of the image. This field will be 
+		left blank or invisible when rdd was not configured to 
+		calculate an SHA-1 hash value.</li>
+	</ul>
+	
+	<p>
+	Rdd logs everything it does. Click the 'Show logfile' button to view 
+	the logfile.
+	</p><p>
+	The button 'Image or verify another file or device' will return to 
+	the 'image or verify' screen.
+	</p>
+</div>
+
+<div id=networking>
+<h3>Networking</h3>
+	
+	<p>
+	Rdd can use a network to transprort an image from one computer to 
+	another. Rdd uses the TCP/IP protocol over an ethernet connection. 
+	Before you try to establish a connection, make sure you have a computer 
+	with a network card installed and your computer supports the TCP/IP and 
+	ethernet protocols.
+	</p><p>
+	When rdd runs in client mode, rdd reads the file or device that must be 
+	imaged. Instead of storing the image locally, all data is sent over a 
+	network to another computer that runs rdd in server mode. Rdd in 
+	server mode receives the image and stores it locally. To minimize the 
+	network load the image can be sent in a compressed format.
+	</p><p>
+	All settings like selecting the file or device to image, the blockize, 
+	etc. are configured in rdd running in client mode. Even the location 
+	where to store the file on the server is selected in client mode. 
+	Before the image is sent, the rdd client notifies the rdd server where 
+	to store the image.
+	</p><p>
+	Rdd in client mode will try to establish a connection to the specified 
+	rdd server. The server must therefore be configured first. It must be 
+	'listening' on the network for an rdd client that wants to establish a 
+	connection.
+	</p><p>
+	Make sure there is a  network route from the rdd client to the rdd 
+	server and that it is not blocked by a firewall. If a firewall is 
+	blocking the route you will have to open a port on the firewall. You 
+	can configure rdd to use any TCP port.
+	</p>
+
+</div>
+	
+<div id=client>
+<h3>Client mode settings</h3>
+
+	<p>
+	Please refer to the <a href="#networking">Networking</a> section of for 
+	the basics of rdd in client mode and rdd in server mode.
+	</p><p>
+	In this screen you can configure rdd in client mode. You can enter the 
+	name or the IP address of the computer that is running rdd in server 
+	mode. The image can be compressed to minimize the network load and 
+	increase the speed. In most cases the network speed will be lower than 
+	the speed of the hard disk drive. Reducing the number of bytes to send 
+	will reduce the time that is needed to perform an imaging operation 
+	over a network.
+	</p><p>
+	Rdd in client mode will write a log file on the connection and 
+	transferring the image <i>locally</i>. This file is not sent over the 
+	network. This logfile will look much the same as the logfile rdd makes 
+	in local mode. Note that the compression option does not apply to the 
+	logfile. It only applies to the image that is sent over the network.
+	</p>
+</div>
+
+<div id=client-advanced>
+<h3>Client mode settings, advanced</h3>
+	
+	<p>
+	Rdd can use any TCP port in the range from 0 to 65535. Make sure the 
+	rdd client and the rdd server both use the same TCP port.
+	</p>
+	
+</div>
+
+<div id="client-connecting">
+<h3>Client mode, connecting</h3>
+
+	<p>
+	This screen shows rdd is running in client mode trying to connect to 
+	a computer that is running in server mode. When the connection is 
+	established, this screen will disappear and be replaced by a progess 
+	screen. If no connection can be established, make sure the computer 
+	that is running rdd in server mode is waiting for a connection and 
+	there is a network route from the rdd client to the rdd server.
+	</p>
+	
+</div>
+
+<div id="server">
+<h3>Server mode settings</h3>
+
+	<p>
+	Please refer to the <a href="#networking">Networking</a> section of for 
+	the basics of rdd in client mode and rdd in server mode.
+	</p><p>
+	Rdd in server mode will write a logfile on the connection and 
+	transferring the image. 
+	</p>
+
+</div>
+
+<div id="server-advanced">
+<h3>Server mode settings, advanced</h3>
+	
+	<p>
+	Rdd can use any TCP port in the range from 0 to 65535. Make sure the 
+	rdd client and the rdd server both use the same TCP port.
+	</p>
+	
+</div>
+
+<div id="server-waiting">
+<h3>Server mode, waiting</h3>
+
+	<p>
+	This screen shows rdd is running in server mode, waiting for an rdd 
+	client trying to establish a connection. When the connection is 
+	established, this screen will disappear and be replaced by a progress 
+	screen. If no connection can be established, make sure the computer 
+	that is running rdd in client mode is trying to connect and that there 
+	is a network route from the rdd client to the rdd server.
+	</p>
+
+</div>
+
+<div id="server-connected">
+<h3>Sever mode, connected</h3>
+
+	<p>
+	This screen shows there is a connection between the rdd client and the 
+	rdd server. The following information is avialable:
+	</p>
+
+	<ul>
+		<li>Elapsed time: The time from the moment rdd started 
+		imaging until now.</li>
+		<li>Progress: This item shows the progress. Keep in mind that 
+		progress information cannot be relied on when imaging media
+		with bad blocks.</li>
+		<li>Processed: The number of bytes processed so far.</li>
+	</ul>
+
+</div>
+
+<div id="server-finished">
+<h3>Server mode, finished</h3>
+
+	<p>
+	This screen provides information on the completed image. 
+	The following information is available:
+	</p>
+
+	<ul>
+		<li>Mode: this item tells wheather rdd imaged in local 
+		mode or in client mode. This item also provides information 
+		on wheather rdd stopped after finishing imaging, or that it was 
+		interrupted by the user.</li>
+		<li>Total time: The time from the moment rdd started 
+		imaging until all bytes were imaged.</li>
+		<li>Processed: The number of bytes processed.</li>
+	</ul>
+
+	<p>
+	Rdd logs everything it does. Click the 'Show logfile' button to view 
+	the logfile.
+	</p><p>
+	The button 'Image or verify another file or device' will return to 
+	the 'image or verify' screen.
+	</p>
+	
+</div>
+
+<div id="verify">
+<h3>Verify an image</h3>
+
+
+	<p>
+	Rdd can canculate MD5 and SHA-1 hashes over all bytes it reads. Besides 
+	these hashes over the complete image, rdd can calculate Adler-32 and 
+	CRC-32 checksums over blocks of data it reads. All these hashes and 
+	checksums can be used, up to a certain extent, to verify the integrity 
+	of an image produced by rdd. 
+	</p><p>
+	Please refer to the sections <a href="#integrity">Integrity</a> and 
+	<a href="#integrity-advanced">Integrity, advanced</a> for a discussion 
+	on these hashes and checksums.
+	</p><p>
+	In this screen you can conofigure the following items:
+	</p>
+
+	<ul>
+		<li>The image to verify.</li>
+		<li>The file to write the logging information on verifying an 
+		image to.</li>
+		<li>Wheather or not an MD5 hash must be calculated</li>
+		<li>Wheather or not a SHA-1 hash must be calculated</li>
+	</ul>
+	<p>
+	Note that rdd does not verify the hashes. Verification must be done by 
+	comparing the hash rdd calculates at verifying with the hash rdd 
+	calculated at imaging.
+	</p><p>
+	The default is that rdd expects an Adler-32 checksum file is available 
+	named like the image file, but with the extension <i>a32</i>. This 
+	setting can be changed in the Verify, Advanced screen.
+	</p>
+</div>
+
+<div id="verify-advanced">
+<h3>Verify an image, advanced</h3>
+
+	<p>
+	In this screen you can select the correct Adler-32 checksum file and 
+	the correct CRC-32 checksum file. If rdd did not make these files 
+	during imaging, you should not use them in verifying an image. 
+	Information that is not available can not be verified.
+	</p>
+
+</div>
+
+<div id="verifying">
+<h3>Verifying an image</h3>
+		
+	<p>
+	This screen shows rdd is verifying and image file. 
+	The following information is avialable:
+	</p>
+
+	<ul>
+		<li>Progress: This item shows the progress. Keep in mind that 
+		progress information cannot be relied on when imaging media
+		with bad blocks.</li>
+		<li>Elapsed time: The time from the moment rdd started 
+		imaging until now.</li>
+		<li>Adler-32 errors: The number of blocks that have a 
+		different Adler-32 checksum than rdd calculated during 
+		imaging.</li>
+		<li>CRC-32 errors: The number of blocks that have a 
+		different CRC-32 checksum than rdd calculated during 
+		imaging.</li>
+	</ul>
+		
+</div>
+
+<div id="verifying-finished">
+<h3>Finished verifying</h3>
+
+	<p>
+	This screen is shown when rdd has finished verifying an image file.
+	The following information is avialable:
+	</p>
+
+	<ul>
+		<li>Image file: The name of the image file that has been
+		verified</li>
+		<li>Adler-32 errors: The number of blocks that have a 
+		different Adler-32 checksum than rdd calculated during 
+		imaging.
+		<li>CRC-32 errors: The number of blocks that have a 
+		different CRC-32 checksum than rdd calculated during 
+		imaging.
+		<li>MD5: The MD5 hash of the image</li>
+		<li>SHA-1: The SHA-1 hash of the image</li>
+	</ul>
+
+	<p>
+	Rdd logs everything it does. Click the 'Show logfile' button to view 
+	the logfile.
+	</p><p>
+	The button 'Image or verify another file or device' will return to 
+	the 'image or verify' screen.
+	</p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+Content
+1. Introduction
+2. Platforms
+2.1 RedHat Linux
+2.2 MacOS
+
+3. Configuration Options
+3.1 Tracing
+3.2 Console
+3.3 Interactive Prompting
+3.4 Raw Device
+3.5 GUI
+
+1. Introduction
+
+At present, rdd is distributed as a source package only. I develop
+and test on a RedHat9 Linux distribution.  This may change.
+
+I have little time to test the distribution on other systems,
+so I depend on other users' input for installation instructions
+for those systems.
+
+If you are lucky, then configuration and installation can be as
+easy as
+
+	./configure
+	make
+	make install
+
+You must be root to install rdd, unless you change the installation
+directories.
+
+2. Platforms
+2.1 RedHat Linux
+2.2 Mandrake Linux
+
+3. Configuration Options
+
+You may wish to customize your rdd configuration.  Besides the standard
+configuration options (such as --prefix), you can set rdd-specific options.
+Type
+	./configure --help
+
+Rdd-specific options are discussed in the following subsections.
+
+3.1 Tracing
+
+--enable-tracing
+
+This is a developer option.  If you enable tracing rdd will print
+debug messages.  You should not need this option.  This option is
+disabled by default.
+
+3.2 Console
+
+--disable-console
+
+By default, rdd will send certain messages to the console device
+(/dev/console) and will read a user's answer to interactive questions
+from the console device.
+
+3.3 Interactive Prompting
+
+--disable-prompting
+
+By default, rdd will try to behave in a safe manner. When you are
+about that is something potentially harmful, such as overwriting an
+existing file, rdd will ask whether you are sure about that action.
+This is called prompting.
+
+Prompting can be disabled at run time through the -q option. If you
+wish to disable prompting at compile time then use --disable-prompting.
+
+In GUI mode, rdd will always prompt. GUI prompting cannot be disabled.
+
+3.4 Raw Device
+
+--enable-raw
+
+By enabling raw-device support you can let rdd read from a raw device.
+A raw device is a pseudo device that is connected to a block device
+(e.g. /dev/hda). If the block device is accessed through the corresponding
+raw device, then error recovery will work better.  Read the rdd manual
+page to learn more about raw-device support.
+
+3.5 GUI
+
+--enable-gui
+
+Enable GUI support if you wish to use rdd's graphical user interface.
+To build the GUI you will need the GTK-2 and Glade-2 development packages
+for your Linux system.

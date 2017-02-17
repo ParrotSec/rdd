@@ -1,0 +1,13 @@
+This package was debianized by Danny van der Meeren <danny@illogic.nl> on
+Sun, 19 Nov 2006 19:25:40 +0100.
+
+It was downloaded from http://sourceforge.net/projects/rdd/
+
+Upstream Author: NFI the Netherlands Forensic Intitute
+
+Copyright: (c) 2002-2006 Netherlands Forensic Institute
+
+License: BSD, see `/usr/share/common-licenses/BSD'
+
+The Debian packaging is (C) 2006, Danny van der Meeren <danny@illogic.nl> and
+is licensed under the BSD, see `/usr/share/common-licenses/BSD'.

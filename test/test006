@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+echo
+echo "====== $0 ======"
+
+rm -f output.img
+cmd="./treader"
+eval ${cmd}
+rm -f output.img

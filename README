@@ -1,0 +1,56 @@
+INSTALLATION
+
+Configuration and installation details are discussed in the
+INSTALLATION file in this directory.
+
+
+FAQ
+
+Q. Rdd used to report "time left to completion".  Now it only reports
+   how much has already been copied.  Why?
+
+A. To report an estimated time of completion rdd needs to know the size
+   of the data that is to be copied.  It's easy to obtain the size of a
+   regular file, and for regular files rdd still estimates the time of
+   completion.  Few people use rdd to copy regular files, so they don't
+   notice this.
+
+   For special files, and that includes /dev/hda and /dev/sda, there
+   appears to be no portable way to determine their size.  On Linux
+   rdd used an lseek(2) to the end of the special file, but this trick
+   fails miserably on platforms such as FreeBSD.  For this reason,
+   rdd now reads from a special file until it reaches end-of-file, without
+   knowing in advance how many bytes it will read.
+
+
+Q. What's all this about raw devices?
+
+A. Under Linux, direct disk access is normally achieved by reading
+   from /dev/hda or from /dev/sda.  Data that is returned when you
+   read from /dev/hda travels through the kernel's buffer cache
+   system.  This is unnecessary.  More importantly, when a disk
+   contains a bad sector, you may loose more data than just that
+   particular sector.  I have not yet figured this out in detail,
+   but it probably has to do with reading full pages instead of
+   individual sectors.  This problem appears to go away when the
+   disk is accessed as a raw device (e.g. /dev/raw/raw1).
+
+   Support for raw-device access is entirely experimental, available
+   only for Linux, and disabled by default.  To experiment with
+   raw devices specify --enable-raw-device when you configure rdd.
+
+   To bind a raw device to a block device such as /dev/hda type
+
+	   raw /dev/raw/raw1 /dev/hda
+
+
+Q. Why do I have to specify -r when I read from a raw device (e.g.
+   /dev/raw/raw1)?
+
+A. When applied to a raw device, read(2) does not return zero when
+   end-of-file is reached.  Instead, read(2) returns -1 and sets
+   errno to ENXIO.  This is now used as the end-of-file test for
+   raw devices.  I do not want to include this into the general-purpose
+   test for all inputs, because it may cause rdd to ignore true errors
+   reported by non-raw devices.  Therefore, this test is activated
+   only when you specify the -r option.

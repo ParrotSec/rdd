@@ -1,0 +1,42 @@
+#!/usr/bin/make -f
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+        CFLAGS += -O0
+else
+        CFLAGS += -O2
+endif
+
+build: build-stamp
+build-stamp:
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --mandir=\$${prefix}/share/man\
+		    		--enable-raw-device
+	$(MAKE)
+	touch $@
+
+install: build
+	dh_clean -k
+	$(MAKE) install prefix=$(CURDIR)/debian/rdd/usr
+
+clean:
+	rm -f build-stamp
+	dh_clean
+	-$(MAKE) distclean
+
+binary-indep:
+
+binary-arch binary: build install
+	dh_install -a 
+	dh_installchangelogs -a
+	dh_installdocs -a
+	dh_installman -a debian/plot-entropy.1 debian/plot-md5.1 debian/rddi.1
+	dh_compress -a
+	dh_fixperms -a
+	dh_strip -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+.PHONY: build binary binary-arch binary-indep clean install

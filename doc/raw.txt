@@ -1,0 +1,16 @@
+Linux has raw-device support.  See raw(8).
+
+Raw devices introduce two complications:
+
+1.  A read(2) on a raw device does *not* return 0 when EOF is
+    reached.  Instead, -1 is returned and errno is set to
+    ENXIO.  This makes it difficult to use the raw device
+    transparently.  This is why I added the --raw/-r option.
+
+2.  To use a raw device, the read buffer must be sector-aligned
+    in memory, and all read sizes must be a multiple of the sector
+    size.  Aligning the buffer and rounding up all read sizes
+    is straightforward.  The real problem is that the data requested
+    by the user may not start at the beginning of the user's
+    (sector-aligned) read buffer.  (This is because the user
+    can specify an offset.)

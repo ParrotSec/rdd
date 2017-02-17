@@ -1,0 +1,36 @@
+File format
+
+A checksum file contains checksums computed over
+fixed-size data blocks.  A checksum file contains
+exactly one type of checksum.
+
+A checksum file consists of a header followed by
+zero or more checksum records.
+
+The header format is as follows:
+
+	enum _checksum_algorithm { TYPE_ADLER32 = 1,
+	       TYPE_CRC32 = 2,
+	       TYPE_MD5 = 4,
+	       TYPE_SHA1 = 8
+	};
+	typedef enum _checksum_algorithm checksum_algoritm;
+
+	extern const u_int16_t CHECKSUM_MAGIC;
+	extern const u_int16_t CHECKSUM_VERSION;
+
+	typedef struct _checksum_file_header {
+		u_int16_t magic;
+		u_int16_t version;
+		u_int16_t flags;
+		u_int16_t reserved;
+		u_int32_t blocksize;
+		off_t offset;
+		off_t imagesize;
+	} checksum_file_header;
+
+	typedef struct _checksum_record {
+		u_int32_t checksum;
+	} checksum_record;
+
+The magic field contains the value CHECKSUM_MAGIC (0xdefd).

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+echo
+echo "====== $0 ======"
+
+input="$0-input"
+output="$0-output"
+cmd="python driver-writer -r tsafe ${input} ${output}"
+
+# Empty file
+touch ${input}
+eval ${cmd}
+rm -f ${input} ${output}
+
+# 200 Kbyte file, zero-filled
+dd if=/dev/zero of=${input} bs=1024 count=200
+eval ${cmd}
+rm -f ${input} ${output}
+
+# 200 Kbyte file, random bytes
+dd if=/dev/urandom of=${input} bs=1024 count=200
+eval ${cmd}
+rm -f ${input} ${output}

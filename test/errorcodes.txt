@@ -1,0 +1,151 @@
+#A list of error codes for the rdd message printer unit test.
+#Every record consists of:
+#- A test code. An rdd error starts with 'r', a unix error starts with 'u';
+#- An additional error message that should be printed by rdd;
+#- The expected rdd error message. This item is discarded for unix errors
+
+#All records are separated by a comma.
+
+#rdd error codes
+R1,rdd error code 1,out of memory
+R2,rdd error code 2,bad argument
+R3,rdd error code 3,compression error
+R4,rdd error code 4,write error
+R5,rdd error code 5,close error
+R6,rdd error code 6,output file already exists
+R7,rdd error code 7,cannot open file
+R8,rdd error code 8,cannot connect
+R9,rdd error code 9,cannot determine current position
+R10,rdd error code 10,seek error
+R11,rdd error code 11,read error
+R12,rdd error code 12,insufficient space in buffer
+R13,rdd error code 13,syntax error
+R14,rdd error code 14,number out of range
+R15,rdd error code 15,try again later
+R16,rdd error code 16,not found
+R17,rdd error code 17,operation has been aborted
+
+#unix error codes
+U1,unix error code 1
+U2,unix error code 2
+U3,unix error code 3
+U4,unix error code 4
+U5,unix error code 5
+U6,unix error code 6
+U7,unix error code 7
+U8,unix error code 8
+U9,unix error code 9
+U10,unix error code 10
+U11,unix error code 11
+U12,unix error code 12
+U13,unix error code 13
+U14,unix error code 14
+U15,unix error code 15
+U16,unix error code 16
+U17,unix error code 17
+U18,unix error code 18
+U19,unix error code 19
+U20,unix error code 20
+U21,unix error code 21
+U22,unix error code 22
+U23,unix error code 23
+U24,unix error code 24
+U25,unix error code 25
+U26,unix error code 26
+U27,unix error code 27
+U28,unix error code 28
+U29,unix error code 29
+U30,unix error code 30
+U31,unix error code 31
+U32,unix error code 32
+U33,unix error code 33
+U34,unix error code 34
+U35,unix error code 35
+U36,unix error code 36
+U37,unix error code 37
+U38,unix error code 38
+U39,unix error code 39
+U40,unix error code 40
+U41,unix error code 41
+U42,unix error code 42
+U43,unix error code 43
+U44,unix error code 44
+U45,unix error code 45
+U46,unix error code 46
+U47,unix error code 47
+U48,unix error code 48
+U49,unix error code 49
+U50,unix error code 50
+U51,unix error code 51
+U52,unix error code 52
+U53,unix error code 53
+U54,unix error code 54
+U55,unix error code 55
+U56,unix error code 56
+U57,unix error code 57
+U58,unix error code 58
+U59,unix error code 59
+U60,unix error code 60
+U61,unix error code 61
+U62,unix error code 62
+U63,unix error code 63
+U64,unix error code 64
+U65,unix error code 65
+U66,unix error code 66
+U67,unix error code 67
+U68,unix error code 68
+U69,unix error code 69
+U70,unix error code 70
+U71,unix error code 71
+U72,unix error code 72
+U73,unix error code 73
+U74,unix error code 74
+U75,unix error code 75
+U76,unix error code 76
+U77,unix error code 77
+U78,unix error code 78
+U79,unix error code 79
+U80,unix error code 80
+U81,unix error code 81
+U82,unix error code 82
+U83,unix error code 83
+U84,unix error code 84
+U85,unix error code 85
+U86,unix error code 86
+U87,unix error code 87
+U88,unix error code 88
+U89,unix error code 89
+U90,unix error code 90
+U91,unix error code 91
+U92,unix error code 92
+U93,unix error code 93
+U94,unix error code 94
+U95,unix error code 95
+U96,unix error code 96
+U97,unix error code 97
+U98,unix error code 98
+U99,unix error code 99
+U100,unix error code 100
+U101,unix error code 101
+U102,unix error code 102
+U103,unix error code 103
+U104,unix error code 104
+U105,unix error code 105
+U106,unix error code 106
+U107,unix error code 107
+U108,unix error code 108
+U109,unix error code 109
+U110,unix error code 110
+U111,unix error code 111
+U112,unix error code 112
+U113,unix error code 113
+U114,unix error code 114
+U115,unix error code 115
+U116,unix error code 116
+U117,unix error code 117
+U118,unix error code 118
+U119,unix error code 119
+U120,unix error code 120
+U121,unix error code 121
+U122,unix error code 122
+U123,unix error code 123
